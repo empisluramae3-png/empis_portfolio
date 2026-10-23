@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luramae Encarnacion Empis | UI/UX & Front-End Developer Portfolio</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        softBlue: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            200: '#bae0fd',
+                            300: '#7cc8fb',
+                            400: '#36adf7',
+                            500: '#0c92e4',
+                            600: '#0274c2',
+                            700: '#035ca0',
+                            800: '#074e84',
+                            900: '#0c426e',
+                            950: '#082a49',
+                        },
+                        slateBlue: {
+                            50: '#f4f6f8',
+                            100: '#e4e7eb',
+                            200: '#cbd2d9',
+                            300: '#9aa5b1',
+                            400: '#7b8794',
+                            500: '#616e7c',
+                            600: '#52606d',
+                            700: '#3e4c59',
+                            800: '#323f4b',
+                            900: '#1f2933',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar for soft blue aesthetic */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f0f7ff;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #bae0fd;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #7cc8fb;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(224, 239, 254, 0.8);
+        }
+
+        .dark .glass-card {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(30, 41, 59, 0.8);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 font-sans transition-colors duration-300 antialiased selection:bg-softBlue-200 selection:text-softBlue-900">
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none"></div>
+
+    <!-- Navigation Bar -->
+    <nav class="fixed top-0 left-0 w-full z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-softBlue-100 dark:border-slate-800 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo / Name -->
+                <a href="#" class="flex items-center gap-2 group">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-softBlue-500 to-softBlue-300 text-white font-bold flex items-center justify-center shadow-md shadow-softBlue-200 dark:shadow-none group-hover:scale-105 transition-transform">
+                        LE
+                    </div>
+                    <span class="font-bold text-lg text-slate-800 dark:text-slate-100 tracking-tight group-hover:text-softBlue-600 transition-colors">
+                        Luramae <span class="text-softBlue-500 font-normal">Empis</span>
+                    </span>
+                </a>
+
+                <!-- Desktop Navigation Links -->
+                <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+                    <a href="#about" class="hover:text-softBlue-600 dark:hover:text-softBlue-400 transition-colors">About</a>
+                    <a href="#skills" class="hover:text-softBlue-600 dark:hover:text-softBlue-400 transition-colors">Skills</a>
+                    <a href="#projects" class="hover:text-softBlue-600 dark:hover:text-softBlue-400 transition-colors">Projects</a>
+                    <a href="#contact" class="hover:text-softBlue-600 dark:hover:text-softBlue-400 transition-colors">Contact</a>
+                </div>
+
+                <!-- Action Controls (Theme Toggle + CTA) -->
+                <div class="hidden md:flex items-center gap-4">
+                    <button id="theme-toggle" aria-label="Toggle Theme" class="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-softBlue-50 dark:hover:bg-slate-800 transition-colors">
+                        <i id="theme-toggle-dark-icon" class="fa-solid fa-moon text-lg hidden"></i>
+                        <i id="theme-toggle-light-icon" class="fa-solid fa-sun text-lg hidden"></i>
+                    </button>
+                    <a href="#contact" class="px-4 py-2 text-sm font-medium text-white bg-softBlue-500 hover:bg-softBlue-600 rounded-xl shadow-sm shadow-softBlue-200 dark:shadow-none transition-all hover:shadow-md hover:-translate-y-0.5">
+                        Let's Talk
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="flex items-center gap-2 md:hidden">
+                    <button id="theme-toggle-mobile" aria-label="Toggle Theme Mobile" class="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-softBlue-50 dark:hover:bg-slate-800 transition-colors">
+                        <i id="theme-toggle-dark-icon-m" class="fa-solid fa-moon text-lg hidden"></i>
+                        <i id="theme-toggle-light-icon-m" class="fa-solid fa-sun text-lg hidden"></i>
+                    </button>
+                    <button id="mobile-menu-btn" aria-label="Toggle Mobile Menu" class="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-softBlue-50 dark:hover:bg-slate-800">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Container -->
+        <div id="mobile-menu" class="hidden md:hidden border-b border-softBlue-100 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg px-4 pt-2 pb-4 space-y-3">
+            <a href="#about" class="block py-2 text-base font-medium hover:text-softBlue-500 transition-colors">About</a>
+            <a href="#skills" class="block py-2 text-base font-medium hover:text-softBlue-500 transition-colors">Skills</a>
+            <a href="#projects" class="block py-2 text-base font-medium hover:text-softBlue-500 transition-colors">Projects</a>
+            <a href="#contact" class="block py-2 text-base font-medium hover:text-softBlue-500 transition-colors">Contact</a>
+            <a href="#contact" class="block w-full text-center px-4 py-2.5 text-sm font-medium text-white bg-softBlue-500 rounded-xl shadow-sm">Get In Touch</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden">
+        <!-- Soft Background Glows -->
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-softBlue-200/50 dark:bg-softBlue-900/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute top-1/3 right-10 w-72 h-72 bg-softBlue-100/60 dark:bg-slate-800/40 rounded-full blur-2xl pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Hero Left Column: Intro Text -->
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-softBlue-100 dark:bg-slate-800 text-softBlue-700 dark:text-softBlue-300 text-xs sm:text-sm font-medium border border-softBlue-200 dark:border-slate-700 shadow-xs">
+                        <span class="w-2 h-2 rounded-full bg-softBlue-500 animate-pulse"></span>
+                        BSIT Student @ Cebu Eastern College
+                    </div>
+
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
+                        Hi, I'm <span class="bg-gradient-to-r from-softBlue-600 via-softBlue-500 to-softBlue-400 bg-clip-text text-transparent">Luramae Empis</span>
+                    </h1>
+
+                    <p class="text-lg sm:text-xl text-slate-600 dark:text-slate-300 font-normal leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                        Passionate about crafting clean, visually delightful, and highly intuitive <strong class="text-softBlue-600 dark:text-softBlue-300 font-semibold">User Interfaces (UI)</strong>. Focused on turning complex ideas into seamless user experiences.
+                    </p>
+
+                    <!-- Hero Call to Actions -->
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+                        <a href="#projects" class="w-full sm:w-auto px-6 py-3.5 text-center font-medium text-white bg-softBlue-500 hover:bg-softBlue-600 rounded-xl shadow-md shadow-softBlue-200 dark:shadow-none transition-all hover:scale-[1.02] active:scale-[0.98]">
+                            View My Projects <i class="fa-solid fa-arrow-down ml-2 text-xs"></i>
+                        </a>
+                        <a href="#contact" class="w-full sm:w-auto px-6 py-3.5 text-center font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-softBlue-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98]">
+                            Get In Touch <i class="fa-regular fa-paper-plane ml-2 text-xs"></i>
+                        </a>
+                    </div>
+
+                    <!-- Quick Highlight Stats -->
+                    <div class="pt-8 border-t border-slate-200 dark:border-slate-800 grid grid-cols-3 gap-4 max-w-md mx-auto lg:mx-0 text-center lg:text-left">
+                        <div>
+                            <p class="text-2xl font-bold text-softBlue-600 dark:text-softBlue-400">UI/UX</p>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Core Focus</p>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold text-softBlue-600 dark:text-softBlue-400">4+</p>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Key Projects</p>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold text-softBlue-600 dark:text-softBlue-400">CEC</p>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">BSIT Scholar</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Right Column: UI Mockup Visual Card -->
+                <!-- Hero Right Column: Profile Picture & Interactive Card -->
+                <div class="lg:col-span-5 relative flex justify-center">
+                    <div class="relative w-full max-w-md glass-card rounded-3xl p-6 shadow-xl shadow-softBlue-100/50 dark:shadow-none border border-softBlue-200 dark:border-slate-800">
+                        <!-- Decorative UI Card Header -->
+                        <div class="flex items-center justify-between pb-4 mb-4 border-b border-softBlue-100 dark:border-slate-800">
+                            <div class="flex gap-2">
+                                <span class="w-3 h-3 rounded-full bg-rose-400"></span>
+                                <span class="w-3 h-3 rounded-full bg-amber-400"></span>
+                                <span class="w-3 h-3 rounded-full bg-emerald-400"></span>
+                            </div>
+                            <span class="text-xs font-mono text-slate-400">luramae-ui-designer.app</span>
+                        </div>
+
+                        <!-- Profile Display in Hero Card -->
+                        <div class="flex flex-col items-center text-center p-2 mb-4">
+                            <div class="relative w-32 h-32 mb-3 rounded-full p-1 bg-gradient-to-tr from-softBlue-500 via-softBlue-300 to-softBlue-100 shadow-md">
+                                <img src="PIC.jfif" alt="Luramae Encarnacion Empis" onerror="this.onerror=null; this.src='https://placehold.co/300x300/e0effe/074e84?text=Luramae+Empis';" class="w-full h-full object-cover rounded-full border-2 border-white dark:border-slate-900">
+                                <span class="absolute bottom-1 right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-900"></span>
+                            </div>
+                            <h2 class="text-base font-bold text-slate-800 dark:text-slate-100">Luramae Encarnacion Empis</h2>
+                            <p class="text-xs text-softBlue-600 dark:text-softBlue-400 font-medium">UI Specialist & BSIT Student</p>
+                        </div>
+
+                        <!-- Card Content Preview -->
+                        <div class="space-y-3">
+                            <div class="bg-softBlue-50 dark:bg-slate-800/80 p-3.5 rounded-2xl border border-softBlue-100 dark:border-slate-700 flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-softBlue-500 text-white flex items-center justify-center text-lg shrink-0">
+                                    <i class="fa-solid fa-palette"></i>
+                                </div>
+                                <div class="text-left">
+                                    <h2 class="text-xs font-semibold text-slate-800 dark:text-slate-200">User Interface Design</h2>
+                                    <p class="text-[11px] text-slate-500 dark:text-slate-400">Soft palettes, responsive wireframes, clean layouts</p>
+                                </div>
+                            </div>
+
+                            <div class="bg-softBlue-50 dark:bg-slate-800/80 p-3.5 rounded-2xl border border-softBlue-100 dark:border-slate-700 flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center text-lg shrink-0">
+                                    <i class="fa-solid fa-laptop-code"></i>
+                                </div>
+                                <div class="text-left">
+                                    <h2 class="text-xs font-semibold text-slate-800 dark:text-slate-200">Front-End Development</h2>
+                                    <p class="text-[11px] text-slate-500 dark:text-slate-400">HTML5, CSS3, JS, Tailwind framework</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Subtle Design Badge -->
+                        <div class="mt-5 pt-3 border-t border-softBlue-100 dark:border-slate-800 flex justify-between items-center text-xs text-slate-500">
+                            <span>Status: Available for projects</span>
+                            <span class="text-softBlue-600 font-semibold">Cebu, PH</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- About Me Section -->
+    <section id="about" class="py-20 bg-white dark:bg-slate-800/50 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-xs font-bold text-softBlue-600 dark:text-softBlue-400 tracking-widest uppercase mb-2">About Me</h2>
+                <p class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">Designing with Clarity & Purpose</p>
+                <div class="w-16 h-1 bg-softBlue-400 mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <!-- Profile Image Showcase -->
+                <div class="lg:col-span-5 flex justify-center">
+                    <div class="relative w-72 h-80 sm:w-80 sm:h-96 rounded-3xl bg-gradient-to-tr from-softBlue-300 via-softBlue-200 to-softBlue-100 dark:from-slate-800 dark:to-slate-700 p-2.5 shadow-xl border border-softBlue-200 dark:border-slate-700 group">
+                        <div class="w-full h-full rounded-2xl overflow-hidden bg-white dark:bg-slate-900 relative">
+                            <img src="PIC.jfif" alt="Luramae Encarnacion Empis Profile" onerror="this.onerror=null; this.src='https://placehold.co/400x500/e0effe/074e84?text=Luramae+Empis';" class="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105">
+                            
+                            <!-- Soft overlay badge -->
+                            <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-slate-900/80 via-slate-900/40 to-transparent p-4 text-white text-center">
+                                <h3 class="font-bold text-base">Luramae E. Empis</h3>
+                                <p class="text-xs text-softBlue-200">BSIT Student &bull; Cebu Eastern College</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Narrative Content -->
+                <div class="lg:col-span-7 space-y-6 text-slate-600 dark:text-slate-300">
+                    <p class="text-base sm:text-lg leading-relaxed">
+                        Hello! I am <strong class="text-slate-900 dark:text-white font-semibold">Luramae Encarnacion Empis</strong>, a Bachelor of Science in Information Technology (BSIT) student at <strong class="text-slate-900 dark:text-white font-semibold">Cebu Eastern College</strong>.
+                    </p>
+                    <p class="text-base sm:text-lg leading-relaxed">
+                        My primary passion lies in <strong class="text-softBlue-600 dark:text-softBlue-400 font-semibold">User Interface (UI) Design</strong> and front-end development. I enjoy bridging the gap between functional systems and pleasing visuals, ensuring every element is easy on the eyes, accessible, and straightforward to navigate.
+                    </p>
+                    <p class="text-base sm:text-lg leading-relaxed">
+                        Through various academic and group projects—ranging from community management tools like the Barangay Mambaling web application to interactive games and canvas graphics—I continuously refine my wireframing, prototyping, and responsive web layouts.
+                    </p>
+
+                    <!-- Key Pillars -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+                        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800 flex items-start gap-3">
+                            <i class="fa-solid fa-eye text-softBlue-500 text-xl mt-1"></i>
+                            <div>
+                                <h4 class="font-semibold text-slate-800 dark:text-slate-200 text-sm">Eye-Friendly Themes</h4>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">Selecting calm, low-contrast, legible palettes.</p>
+                            </div>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800 flex items-start gap-3">
+                            <i class="fa-solid fa-mobile-screen-button text-softBlue-500 text-xl mt-1"></i>
+                            <div>
+                                <h4 class="font-semibold text-slate-800 dark:text-slate-200 text-sm">Responsive Layouts</h4>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">Optimizing design across phones, tablets, and desktops.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-20 bg-slate-50 dark:bg-slate-900 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-xs font-bold text-softBlue-600 dark:text-softBlue-400 tracking-widest uppercase mb-2">My Toolkit</h2>
+                <p class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">Skills & Specializations</p>
+                <div class="w-16 h-1 bg-softBlue-400 mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- UI/UX Design Category -->
+                <div class="glass-card rounded-2xl p-6 shadow-sm border border-softBlue-100 dark:border-slate-800 hover:shadow-md transition-shadow">
+                    <div class="w-12 h-12 rounded-xl bg-softBlue-100 dark:bg-slate-800 text-softBlue-600 dark:text-softBlue-400 flex items-center justify-center text-2xl mb-6">
+                        <i class="fa-solid fa-pen-nib"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-4">UI/UX Design</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-center gap-3 text-slate-600 dark:text-slate-300 text-sm">
+                            <i class="fa-solid fa-circle-check text-softBlue-500 text-xs"></i>
+                            Figma Prototyping & Wireframing
+                        </li>
+                        <li class="flex items-center gap-3 text-slate-600 dark:text-slate-300 text-sm">
+                            <i class="fa-solid fa-circle-check text-softBlue-500 text-xs"></i>
+                            Canva Design & Graphics
+                        </li>
+                        <li class="flex items-center gap-3 text-slate-600 dark:text-slate-300 text-sm">
+                            <i class="fa-solid fa-circle-check text-softBlue-500 text-xs"></i>
+                            Color Theory & Soft Palettes
+                        </li>
+                        <li class="flex items-center gap-3 text-slate-600 dark:text-slate-300 text-sm">
+                            <i class="fa-solid fa-circle-check text-softBlue-500 text-xs"></i>
+                            User-Centric Navigation Flow
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Web Technologies Category -->
+                <div class="glass-card rounded-2xl p-6 shadow-sm border border-softBlue-100 dark:border-slate-800 hover:shadow-md transition-shadow">
+                    <div class="w-12 h-12 rounded-xl bg-softBlue-100 dark:bg-slate-800 text-softBlue-600 dark:text-softBlue-400 flex items-center justify-center text-2xl mb-6">
+                        <i class="fa-solid fa-code"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-4">Web Technologies</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-center gap-3 text-slate-600 dark:text-slate-300 text-sm">
+                            <i class="fa-solid fa-circle-check text-softBlue-500 text-xs"></i>
+                            HTML5 & Semantic Markup
+                        </li>
+                        <li class="flex items-center gap-3 text-slate-600 dark:text-slate-300 text-sm">
+                            <i class="fa-solid fa-circle-check text-softBlue-500 text-xs"></i>
+                            CSS3 & Responsive Flexbox/Grid
+                        </li>
+                        <li class="flex items-center gap-3 text-slate-600 dark:text-slate-300 text-sm">
+                            <i class="fa-solid fa-circle-check text-softBlue-500 text-xs"></i>
+                            JavaScript (DOM Manipulation & Logic)
+                        </li>
+                        <li class="flex items-center gap-3 text-slate-600 dark:text-slate-300 text-sm">
+                            <i class="fa-solid fa-circle-check text-softBlue-500 text-xs"></i>
+                            Tailwind CSS & Utility Styling
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Tools & Soft Skills Category -->
+                <div class="glass-card rounded-2xl p-6 shadow-sm border border-softBlue-100 dark:border-slate-800 hover:shadow-md transition-shadow">
+                    <div class="w-12 h-12 rounded-xl bg-softBlue-100 dark:bg-slate-800 text-softBlue-600 dark:text-softBlue-400 flex items-center justify-center text-2xl mb-6">
+                        <i class="fa-solid fa-lightbulb"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-4">Soft Skills & Tools</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-center gap-3 text-slate-600 dark:text-slate-300 text-sm">
+                            <i class="fa-solid fa-circle-check text-softBlue-500 text-xs"></i>
+                            Group Collaboration & Leadership
+                        </li>
+                        <li class="flex items-center gap-3 text-slate-600 dark:text-slate-300 text-sm">
+                            <i class="fa-solid fa-circle-check text-softBlue-500 text-xs"></i>
+                            Problem Solving & Debugging
+                        </li>
+                        <li class="flex items-center gap-3 text-slate-600 dark:text-slate-300 text-sm">
+                            <i class="fa-solid fa-circle-check text-softBlue-500 text-xs"></i>
+                            Git Version Control Basics
+                        </li>
+                        <li class="flex items-center gap-3 text-slate-600 dark:text-slate-300 text-sm">
+                            <i class="fa-solid fa-circle-check text-softBlue-500 text-xs"></i>
+                            Project Presentation & Documentation
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 bg-white dark:bg-slate-800/50 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <h2 class="text-xs font-bold text-softBlue-600 dark:text-softBlue-400 tracking-widest uppercase mb-2">Portfolio Showcase</h2>
+                <p class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">Highlighted Class & Web Projects</p>
+                <div class="w-16 h-1 bg-softBlue-400 mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <!-- Project Filter Buttons -->
+            <div class="flex flex-wrap justify-center gap-2 mb-12">
+                <button class="filter-btn active-filter px-4 py-2 text-sm font-medium rounded-xl bg-softBlue-500 text-white transition-all shadow-sm" data-filter="all">All Projects</button>
+                <button class="filter-btn px-4 py-2 text-sm font-medium rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-softBlue-100 dark:hover:bg-slate-700 transition-all" data-filter="web">Web Applications</button>
+                <button class="filter-btn px-4 py-2 text-sm font-medium rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-softBlue-100 dark:hover:bg-slate-700 transition-all" data-filter="design">UI & Canva</button>
+                <button class="filter-btn px-4 py-2 text-sm font-medium rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-softBlue-100 dark:hover:bg-slate-700 transition-all" data-filter="game">Interactive Games</button>
+            </div>
+
+            <!-- Projects Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <!-- Project Card 1: Barangay Mambaling -->
+                <div class="project-card glass-card rounded-2xl overflow-hidden border border-softBlue-100 dark:border-slate-800 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col" data-category="web">
+                    <div class="relative bg-gradient-to-br from-softBlue-100 to-softBlue-200 dark:from-slate-800 dark:to-slate-700 h-48 flex items-center justify-center p-6">
+                        <div class="w-16 h-16 rounded-2xl bg-white dark:bg-slate-900 shadow-md flex items-center justify-center text-softBlue-600 text-3xl">
+                            <i class="fa-solid fa-city"></i>
+                        </div>
+                        <span class="absolute top-4 right-4 px-3 py-1 rounded-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm text-xs font-semibold text-softBlue-700 dark:text-softBlue-300">
+                            Group Project
+                        </span>
+                    </div>
+
+                    <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Barangay Mambaling System</h3>
+                            <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-4">
+                                A community portal designed to streamline barangay records, requests, and information sharing for local residents.
+                            </p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-2.5 py-1 rounded-md bg-softBlue-50 dark:bg-slate-800 text-softBlue-700 dark:text-softBlue-300 text-xs font-medium">UI Structure</span>
+                                <span class="px-2.5 py-1 rounded-md bg-softBlue-50 dark:bg-slate-800 text-softBlue-700 dark:text-softBlue-300 text-xs font-medium">Community System</span>
+                                <span class="px-2.5 py-1 rounded-md bg-softBlue-50 dark:bg-slate-800 text-softBlue-700 dark:text-softBlue-300 text-xs font-medium">Web Portal</span>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                            <a href="http://barangaymambaling.infinityfree.io/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm font-semibold text-softBlue-600 hover:text-softBlue-700 dark:text-softBlue-400 transition-colors">
+                                Visit Live System <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Card 2: Shiftgear Web App -->
+                <div class="project-card glass-card rounded-2xl overflow-hidden border border-softBlue-100 dark:border-slate-800 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col" data-category="web">
+                    <div class="relative bg-gradient-to-br from-indigo-100 to-softBlue-200 dark:from-slate-800 dark:to-slate-700 h-48 flex items-center justify-center p-6">
+                        <div class="w-16 h-16 rounded-2xl bg-white dark:bg-slate-900 shadow-md flex items-center justify-center text-indigo-600 text-3xl">
+                            <i class="fa-solid fa-gears"></i>
+                        </div>
+                        <span class="absolute top-4 right-4 px-3 py-1 rounded-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm text-xs font-semibold text-indigo-700 dark:text-indigo-300">
+                            Web Application
+                        </span>
+                    </div>
+
+                    <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Shiftgear Web App</h3>
+                            <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-4">
+                                A modern responsive web application focused on smooth operational controls, clear navigation, and user interaction.
+                            </p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-2.5 py-1 rounded-md bg-softBlue-50 dark:bg-slate-800 text-softBlue-700 dark:text-softBlue-300 text-xs font-medium">Front-End UI</span>
+                                <span class="px-2.5 py-1 rounded-md bg-softBlue-50 dark:bg-slate-800 text-softBlue-700 dark:text-softBlue-300 text-xs font-medium">Vercel Deployment</span>
+                                <span class="px-2.5 py-1 rounded-md bg-softBlue-50 dark:bg-slate-800 text-softBlue-700 dark:text-softBlue-300 text-xs font-medium">Responsive</span>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                            <a href="https://shiftgear-coral.vercel.app/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm font-semibold text-softBlue-600 hover:text-softBlue-700 dark:text-softBlue-400 transition-colors">
+                                Visit Live App <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Card 3: Canva UI Showcase -->
+                <div class="project-card glass-card rounded-2xl overflow-hidden border border-softBlue-100 dark:border-slate-800 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col" data-category="design">
+                    <div class="relative bg-gradient-to-br from-teal-100 to-softBlue-200 dark:from-slate-800 dark:to-slate-700 h-48 flex items-center justify-center p-6">
+                        <div class="w-16 h-16 rounded-2xl bg-white dark:bg-slate-900 shadow-md flex items-center justify-center text-teal-600 text-3xl">
+                            <i class="fa-solid fa-paintbrush"></i>
+                        </div>
+                        <span class="absolute top-4 right-4 px-3 py-1 rounded-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm text-xs font-semibold text-teal-700 dark:text-teal-300">
+                            Graphic & UI Design
+                        </span>
+                    </div>
+
+                    <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Canva UI Design Showcase</h3>
+                            <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-4">
+                                Visual presentation and design prototypes demonstrating layout hierarchy, branding visuals, and creative interface concepts.
+                            </p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-2.5 py-1 rounded-md bg-softBlue-50 dark:bg-slate-800 text-softBlue-700 dark:text-softBlue-300 text-xs font-medium">Canva</span>
+                                <span class="px-2.5 py-1 rounded-md bg-softBlue-50 dark:bg-slate-800 text-softBlue-700 dark:text-softBlue-300 text-xs font-medium">Visual Design</span>
+                                <span class="px-2.5 py-1 rounded-md bg-softBlue-50 dark:bg-slate-800 text-softBlue-700 dark:text-softBlue-300 text-xs font-medium">Branding</span>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                            <a href="https://www.canva.com/design/DAHSdV_twFA/iFhVEE3EwxIXMF0h-NjtVA/edit" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm font-semibold text-softBlue-600 hover:text-softBlue-700 dark:text-softBlue-400 transition-colors">
+                                View Canva Design <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Card 4: Pig Game Project -->
+                <div class="project-card glass-card rounded-2xl overflow-hidden border border-softBlue-100 dark:border-slate-800 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col" data-category="game">
+                    <div class="relative bg-gradient-to-br from-amber-100 to-softBlue-200 dark:from-slate-800 dark:to-slate-700 h-48 flex items-center justify-center p-6">
+                        <div class="w-16 h-16 rounded-2xl bg-white dark:bg-slate-900 shadow-md flex items-center justify-center text-amber-600 text-3xl">
+                            <i class="fa-solid fa-dice"></i>
+                        </div>
+                        <span class="absolute top-4 right-4 px-3 py-1 rounded-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm text-xs font-semibold text-amber-700 dark:text-amber-300">
+                            Interactive JS Game
+                        </span>
+                    </div>
+
+                    <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Pig Game Project</h3>
+                            <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-4">
+                                Interactive dice game showcasing JavaScript DOM logic, game state management, and clear UI turn feedback.
+                            </p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-2.5 py-1 rounded-md bg-softBlue-50 dark:bg-slate-800 text-softBlue-700 dark:text-softBlue-300 text-xs font-medium">JavaScript</span>
+                                <span class="px-2.5 py-1 rounded-md bg-softBlue-50 dark:bg-slate-800 text-softBlue-700 dark:text-softBlue-300 text-xs font-medium">DOM Logic</span>
+                                <span class="px-2.5 py-1 rounded-md bg-softBlue-50 dark:bg-slate-800 text-softBlue-700 dark:text-softBlue-300 text-xs font-medium">Interactive UI</span>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                            <a href="https://drive.google.com/drive/folders/1wpqMTO3v_xcXGQ4Cox5Pmf5GR3IJ-QjM" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm font-semibold text-softBlue-600 hover:text-softBlue-700 dark:text-softBlue-400 transition-colors">
+                                View Project Files <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-slate-50 dark:bg-slate-900 transition-colors relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-xs font-bold text-softBlue-600 dark:text-softBlue-400 tracking-widest uppercase mb-2">Get In Touch</h2>
+                <p class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">Let's Connect & Collaborate</p>
+                <div class="w-16 h-1 bg-softBlue-400 mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                
+                <!-- Contact Direct Details -->
+                <div class="lg:col-span-5 space-y-6">
+                    <div class="glass-card rounded-2xl p-6 border border-softBlue-100 dark:border-slate-800 shadow-sm space-y-6">
+                        <h3 class="text-xl font-bold text-slate-900 dark:text-white">Contact Information</h3>
+                        <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+                            Feel free to reach out for project collaborations, UI design opportunities, or academic inquiries!
+                        </p>
+
+                        <!-- Email Box with Quick Copy -->
+                        <div class="p-4 rounded-xl bg-softBlue-50 dark:bg-slate-800 border border-softBlue-100 dark:border-slate-700 space-y-2">
+                            <span class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Direct Email</span>
+                            <div class="flex items-center justify-between gap-2">
+                                <span id="email-text" class="text-sm font-semibold text-slate-800 dark:text-slate-200 select-all truncate">empisluramae3@gmail.com</span>
+                                <button id="copy-email-btn" class="px-3 py-1.5 text-xs font-medium text-white bg-softBlue-500 hover:bg-softBlue-600 rounded-lg transition-colors shrink-0">
+                                    <i class="fa-regular fa-copy mr-1"></i> Copy
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- School & Location Badge -->
+                        <div class="space-y-3 pt-2">
+                            <div class="flex items-center gap-3 text-slate-600 dark:text-slate-300 text-sm">
+                                <div class="w-8 h-8 rounded-lg bg-softBlue-100 dark:bg-slate-800 text-softBlue-600 dark:text-softBlue-400 flex items-center justify-center shrink-0">
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                </div>
+                                <span>Cebu Eastern College (BSIT Program)</span>
+                            </div>
+
+                            <div class="flex items-center gap-3 text-slate-600 dark:text-slate-300 text-sm">
+                                <div class="w-8 h-8 rounded-lg bg-softBlue-100 dark:bg-slate-800 text-softBlue-600 dark:text-softBlue-400 flex items-center justify-center shrink-0">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                </div>
+                                <span>Cebu City, Philippines</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div class="lg:col-span-7">
+                    <div class="glass-card rounded-2xl p-6 sm:p-8 border border-softBlue-100 dark:border-slate-800 shadow-sm">
+                        <form id="contact-form" class="space-y-5">
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Your Name</label>
+                                <input type="text" id="name" required class="w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-softBlue-400 text-sm transition-all" placeholder="Enter your full name">
+                            </div>
+
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Your Email</label>
+                                <input type="email" id="email" required class="w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-softBlue-400 text-sm transition-all" placeholder="name@example.com">
+                            </div>
+
+                            <div>
+                                <label for="message" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Message</label>
+                                <textarea id="message" rows="4" required class="w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-softBlue-400 text-sm transition-all resize-none" placeholder="Write your message here..."></textarea>
+                            </div>
+
+                            <button type="submit" class="w-full py-3.5 px-6 font-medium text-white bg-softBlue-500 hover:bg-softBlue-600 rounded-xl shadow-md shadow-softBlue-200 dark:shadow-none transition-all flex items-center justify-center gap-2">
+                                <span>Send Message</span>
+                                <i class="fa-regular fa-paper-plane text-xs"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 py-8 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-center sm:text-left">
+            <div>
+                <p class="text-sm font-semibold text-slate-800 dark:text-slate-200">Luramae Encarnacion Empis</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">BSIT Student at Cebu Eastern College &bull; UI/UX Focus</p>
+            </div>
+            
+            <p class="text-xs text-slate-400 dark:text-slate-500">
+                &copy; <span id="year"></span> All rights reserved. Designed with soft blue vibes.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Interactive JavaScript Logic -->
+    <script>
+        // Set dynamic current year
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu on clicking any link
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Theme Switcher (Dark/Light Mode)
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeToggleMobile = document.getElementById('theme-toggle-mobile');
+
+        const darkIcon = document.getElementById('theme-toggle-dark-icon');
+        const lightIcon = document.getElementById('theme-toggle-light-icon');
+        const darkIconM = document.getElementById('theme-toggle-dark-icon-m');
+        const lightIconM = document.getElementById('theme-toggle-light-icon-m');
+
+        function updateThemeIcons(isDark) {
+            if (isDark) {
+                darkIcon.classList.add('hidden');
+                lightIcon.classList.remove('hidden');
+                darkIconM.classList.add('hidden');
+                lightIconM.classList.remove('hidden');
+            } else {
+                darkIcon.classList.remove('hidden');
+                lightIcon.classList.add('hidden');
+                darkIconM.classList.remove('hidden');
+                lightIconM.classList.add('hidden');
+            }
+        }
+
+        // Initialize theme based on preference or local storage
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            updateThemeIcons(true);
+        } else {
+            document.documentElement.classList.remove('dark');
+            updateThemeIcons(false);
+        }
+
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('color-theme', 'light');
+                updateThemeIcons(false);
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('color-theme', 'dark');
+                updateThemeIcons(true);
+            }
+        }
+
+        themeToggleBtn.addEventListener('click', toggleTheme);
+        themeToggleMobile.addEventListener('click', toggleTheme);
+
+        // Toast Notification System
+        function showToast(message, type = 'success') {
+            const toastContainer = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            toast.className = `p-4 rounded-xl shadow-lg border text-sm flex items-center gap-3 transition-all transform translate-y-2 opacity-0 pointer-events-auto ${
+                type === 'success' 
+                    ? 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 border-emerald-200 dark:border-emerald-800' 
+                    : 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 border-rose-200 dark:border-rose-800'
+            }`;
+
+            const icon = type === 'success' 
+                ? '<i class="fa-solid fa-circle-check text-emerald-500 text-lg"></i>' 
+                : '<i class="fa-solid fa-circle-xmark text-rose-500 text-lg"></i>';
+
+            toast.innerHTML = `${icon} <span class="font-medium">${message}</span>`;
+            toastContainer.appendChild(toast);
+
+            // Trigger animation
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 10);
+
+            // Dismiss toast after 3 seconds
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        // Copy Email functionality
+        const copyEmailBtn = document.getElementById('copy-email-btn');
+        const emailText = document.getElementById('email-text').textContent;
+
+        copyEmailBtn.addEventListener('click', () => {
+            // Fallback for execution within strict iframe contexts
+            const dummy = document.createElement("textarea");
+            document.body.appendChild(dummy);
+            dummy.value = emailText;
+            dummy.select();
+            document.execCommand("copy");
+            document.body.removeChild(dummy);
+
+            showToast('Email copied to clipboard!');
+        });
+
+        // Contact Form Validation & Feedback
+        const contactForm = document.getElementById('contact-form');
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            
+            showToast(`Thank you, ${name}! Your message has been sent successfully.`);
+            contactForm.reset();
+        });
+
+        // Project Filter Logic
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const projectCards = document.querySelectorAll('.project-card');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active styling from all buttons
+                filterBtns.forEach(b => {
+                    b.classList.remove('active-filter', 'bg-softBlue-500', 'text-white');
+                    b.classList.add('bg-slate-100', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300');
+                });
+
+                // Add active styling to clicked button
+                btn.classList.add('active-filter', 'bg-softBlue-500', 'text-white');
+                btn.classList.remove('bg-slate-100', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300');
+
+                const filter = btn.getAttribute('data-filter');
+
+                projectCards.forEach(card => {
+                    if (filter === 'all' || card.getAttribute('data-category') === filter) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
